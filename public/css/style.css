@@ -1,0 +1,229 @@
+*, .zero, p {
+    padding: 0;
+    margin: 0;
+}
+
+.flex {
+    display: flex;
+}
+
+.hidden {
+    display: none;
+}
+
+.gray {
+    background-color: lightgrey;
+}
+
+body {
+    height: 100vh;
+}
+
+main, .log-form {
+    height: 96%;
+}
+
+.max-width {
+    width: 100%;
+}
+
+.max-height {
+    height: 100%;
+}
+
+.nav-link {
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    background-color: lightgrey;
+    height: 4%;
+}
+
+.listing {
+    border-right: 1px solid lightgrey;
+}
+
+.listing-img {
+    height: 100px;
+    width: 100px;
+    border-radius: 50px;
+}
+
+.contacts li {
+    width: 100%;
+}
+
+.contacts {
+    padding: 13px 0;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.listing-name {
+    font-size: 15px;
+}
+
+
+
+.conversation {
+    height: 90%;
+    width: 100%;
+    justify-content: space-around;
+    height: fit-content;
+    margin-top: 25px;
+    align-items: center;
+    list-style: none;
+    flex-direction: column-reverse;
+}
+
+.conversation li {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.conversation li p {
+    height: 90px;
+    padding: 10px 10px;
+    background-color: lightgray;
+    border-radius: 0px 20px 20px 20px;
+}
+
+.conversation li:nth-child(odd) {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.conversation li:nth-child(odd) p {
+    background-color: cornflowerblue;
+    display: flex;
+    flex-direction: row-reverse;
+    border-radius: 20px 0px 20px 20px;
+}
+
+.conversation .partial-image {
+    margin-top: -90px;
+}
+
+.avatar {
+    height: 90px;
+    width: 90px;
+    border-radius: 50px;
+}
+
+.partial {
+    width: inherit;
+}
+
+.partial-image {
+    display: flex;
+    justify-content: center;
+}
+
+.sentence {
+    background-color: gainsboro;
+    border-radius: 5px;
+    height: fit-content;
+    padding: 5px 10px;
+}
+
+.tab-pane {
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.input {
+    margin: 30px 0;
+    height: 5%;
+    width: 95%;
+    border: 1px solid darkgrey;
+}
+
+.input input {
+    height: 100%;
+    width: 95%;
+    padding-left: 10px;
+}
+
+.input button {
+    width: 5%;
+}
+
+.who {
+    border-left: 1px solid lightgrey;
+}
+
+.no-border {
+    border: none;
+}
+
+.avatar-b {
+    height: 300px;
+    width: 300px;
+    border-radius: 160px;
+}
+
+.contact-name {
+    height: 20%;
+    display: flex;
+    align-items: center;
+    padding: 30px;
+    font-size: 30px;
+}
+
+.contact-info {
+    height: 80%;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.me {
+    background-color: lightskyblue;
+}
+
+.log {
+    height: 100vh;
+}
+
+.log-form {
+
+}
+
+.semi-div {
+    height: 100%;
+    width: 50%;
+    justify-content: center;
+    align-items: center;
+}
+
+.semi-div form {
+    border: 1px solid black;
+    padding: 100px;
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    align-items: center;
+}
+
+.semi-div input[type="submit"] {
+    margin-top: 10px;
+}
+
+.semi-div form p {
+    font-size: 30px;
+}
+
+#contact-social img {
+    width: 36px;
+    height: 36px;
+}
+
+.active {
+    background-color: lightseagreen!important;
+}
