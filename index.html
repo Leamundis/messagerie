@@ -2,13 +2,14 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="./public/css/bootstrap.min.css">
         <link rel="stylesheet" href="./public/css/style.css">
         <title>Hello World!</title>
     </head>
     <body>
         <header class="max-width flex justify-content-end">
             <img class="to-log" src="./public/img/2x/baseline_account_box_black_18dp.png" alt="">
+            <img class="is-log hidden" src="./public/img/directions_run-24px.svg" alt="">
         </header>
         <main class="max-width">
             <div class="container-fluid zero max-height flex" id="pills-tab">
@@ -18,18 +19,19 @@
                     </div>
                     <div class="chat col-7 p-0">
                         <div class="tab-pane max-height flex">
-                            <div class="max-width">
+                            <div class="max-width overflow">
                                 <ul class="conversation flex" id="conversation"></ul>
                             </div>
                             <div class="input">
                                 <form action="" class="max-height flex">
-                                    <input type="text" name="" id="" class="max-height no-border">
-                                    <button type="submit" class="no-border">Ok</button>
+                                    <input id="what-to-say" type="text" name="" id="" class="max-height no-border">
+                                    <button data-id="" id="send" type="submit" class="no-border">Ok</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                     <div class="who col-4 p-0" data-contact="girl">
+                        
                         <div class="contact-name justify-content-between">
                             <p id="contact-name"></p>
                             <div id="contact-social"></div>
@@ -37,45 +39,57 @@
                         <div class="contact-info flex">
                             <img id="contact-img" src="" class="avatar-b" alt="">
                         </div>
+                        <div class="cam-div">
+                            <p>Caméra</p>
+                            <a class="hidden take-pic">Take Snapshot</a>
+                            <img class="cam-off" src="./public/img/toggle_off-24px.svg" alt="">
+                            <img class="cam-on hidden" src="./public/img/toggle_on-24px.svg" alt="">
+
+                        </div>
+                        <div class="cam1">
+                            <div id="my_camera" style="width:320px; height:240px;"></div>
+                            <div id="my_result"></div>  
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="hidden log-form flex">
                 <div class="register semi-div flex">
-                    <form action="">
+                    <form>
                         <p>Inscription</p>
                         <div>
-                            <label for="pseudo">Pseudo</label>
-                            <input type="text" name="pseudo">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" id="register-name">
                         </div>
                         <div>
                             <label for="password">Mot de passe</label>
-                            <input type="password" name="password">
+                            <input type="password" name="password"  id="register-password">
                         </div>
-                        <input type="submit" value="Envoyer">
+                        <input id="register" type="button" value="Envoyer">
                     </form>
                 </div>
                 <div class="login semi-div flex">
-                    <form action="">
+                    <form>
                         <p>Login</p>
                         <div>
-                            <label for="pseudo">Pseudo</label>
-                            <input type="text" name="pseudo">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" id="login-name">
                         </div>
                         <div>
                             <label for="password">Mot de passe</label>
-                            <input type="text" name="password">
+                            <input type="text" name="password" id="login-password">
                         </div>
-                        <input type="submit" value="Login">
+                        <input type="button" value="Login" id="login">
                     </form>
                 </div>
             </div>
         </main>
 
         <!-- You can also require other files to run in this process -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="./cam/webcam.js"></script>
+        <script src="./public/js/jquery-3.3.1.slim.min.js"></script>
+        <script src="./public/js/popper.min.js"></script>
+        <script src="./public/js/bootstrap.min.js"></script>
         <script src="./renderer.js"></script>
         <script src="./public/js/script.js"></script>
     </body>

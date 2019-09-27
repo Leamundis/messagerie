@@ -1,38 +1,211 @@
-var mongo = require('mongodb');
+const mongo = require('mongodb').MongoClient, 
+url = 'mongodb://localhost:27017/chat',
+ObjectId = require('mongodb').ObjectId;
+
+
+
+
 
 const run = () => {
-    let contacts = [
-        {
-            id: 1,
-            name: "Jon",
-            avatar: "https://gravatar.com/avatar/1577b0ddfa90dfb7b612b5e8bb7fc622?s=400&d=robohash&r=x"
-        },
-        {
-            id: 2,
-            name: "Pierre",
-            avatar: "https://gravatar.com/avatar/0d57488fa495da3eacf5600435b21c5f?s=400&d=robohash&r=x"
-        },
-        {
-            id: 3,
-            name: "Rien",
-            avatar: "https://gravatar.com/avatar/d3ff29b722d32a08c424fac87e71aeac?s=400&d=robohash&r=x"
-        },
-        {
-            id: 4,
-            name: "Eillistrae",
-            avatar: "https://gravatar.com/avatar/682299093508b11741932f47c31d2456?s=400&d=robohash&r=x"
-        },
-        {
-            id: 5,
-            name: "Tempus",
-            avatar: "https://gravatar.com/avatar/7248822680b7e939d1a862730a98287c?s=400&d=robohash&r=x"
-        }
-    ];
-    loadContacts(contacts);
+    if (localStorage.getItem("myName")) {
+        document.querySelector('.log-form').classList.add('hidden');
+        document.querySelector('#pills-tab').classList.remove('hidden');
+        document.querySelector('.to-log').classList.add('hidden');
+        document.querySelector('.is-log').classList.remove('hidden');
+        mongo.connect(url, {useNewUrlParser: true}, (err, client) => {
+            if(err) {
+                console.log(err);
+                return
+            }
+            //console.log('connected');
+            const db = client.db('chat');
+            db.collection("users").find({ 
+                name: 
+                    { $not: { $eq: localStorage.getItem("myName") } } 
+                }).toArray(function(err, contacts) {
+                if (err) throw err;
+                //console.log(contacts)
+                loadContacts(contacts);
+            });
+        })
+    }
+
+    document.querySelector('.to-log').addEventListener('click', () => {
+        document.querySelector('.log-form').classList.toggle('hidden');
+        document.querySelector('#pills-tab').classList.toggle('hidden');
+    })  
+    
+    
+    document.querySelector('.cam-off').addEventListener('click', () => {
+        document.querySelector('.cam-off').classList.add('hidden');
+        document.querySelector('.cam-on').classList.remove('hidden');
+        document.querySelector('.take-pic').classList.remove('hidden');
+        Webcam.attach('#my_camera');
+    })  
+    
+    document.querySelector('.cam-on').addEventListener('click', () => {
+        Webcam.reset();
+        document.querySelector('.cam-off').classList.remove('hidden');
+        document.querySelector('.cam-on').classList.add('hidden');
+        document.querySelector('.take-pic').classList.add('hidden');
+    }) 
+    
+    document.querySelector('.take-pic').addEventListener('click', (e) => {
+        e.preventDefault();
+        Webcam.snap( function(data_uri) {
+            document.getElementById('my_result').innerHTML = '<img src="'+data_uri+'"/>';
+
+
+            let discussion = `<img src="${data_uri}" alt="">`;
+            let chatId = document.querySelector('#send').dataset.id;
+            mongo.connect(url, {useNewUrlParser: true}, (err, client) => {
+                if(err) {
+                    console.log(err);
+                    return
+                }
+                const db = client.db('chat');
+                db.collection('conversations').insertOne({ 
+                    users : [
+                        new ObjectId(chatId),
+                        new ObjectId(localStorage.getItem("id"))
+                    ],
+                    user : {
+                        name : localStorage.getItem("myName"),
+                        avatar : localStorage.getItem("avatar"),
+                        _id : new ObjectId(localStorage.getItem("id"))
+                    },
+                    message : discussion,
+                    dateTime : new Date()
+                })        
+                .then(
+                    mongo.connect(url, {useNewUrlParser: true}, (err, client) => {
+                        if(err) {
+                            console.log(err);
+                            return
+                        }
+                        const db = client.db('chat');
+                        db.collection('users').findOne({
+                            _id: new ObjectId(chatId)
+                        }, (err, resp) => {
+                            loadConversation(resp);
+                        })
+                    })
+                );
+            })
+        });
+    })
+
+
+
+
+    document.querySelector('.is-log').addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.clear();
+        document.querySelector('.log-form').classList.remove('hidden');
+        document.querySelector('#pills-tab').classList.add('hidden');
+        document.querySelector('.to-log').classList.remove('hidden');
+        document.querySelector('.is-log').classList.add('hidden');
+    })
+
+
+    document.querySelector('#send').addEventListener('click', (e) => {
+        e.preventDefault();
+        let discussion = document.querySelector('#what-to-say').value;
+        let chatId = document.querySelector('#send').dataset.id;
+        mongo.connect(url, {useNewUrlParser: true}, (err, client) => {
+            if(err) {
+                console.log(err);
+                return
+            }
+            const db = client.db('chat');
+            db.collection('conversations').insertOne({ 
+                users : [
+                    new ObjectId(chatId),
+                    new ObjectId(localStorage.getItem("id"))
+                ],
+                user : {
+                    name : localStorage.getItem("myName"),
+                    avatar : localStorage.getItem("avatar"),
+                    _id : new ObjectId(localStorage.getItem("id"))
+                },
+                message : document.querySelector('#what-to-say').value,
+                dateTime : new Date()
+            })        
+            .then(
+                mongo.connect(url, {useNewUrlParser: true}, (err, client) => {
+                    if(err) {
+                        console.log(err);
+                        return
+                    }
+                    const db = client.db('chat');
+                    db.collection('users').findOne({
+                        _id: new ObjectId(chatId)
+                    }, (err, resp) => {
+                        loadConversation(resp);
+                    })
+                })
+            );
+        })
+    })
+
+    document.querySelector('#register').addEventListener('click', (e) => {
+        e.preventDefault();
+        let name = document.querySelector('#register-name').value;
+        let password = document.querySelector('#register-name').value;        
+    })
+
+    document.querySelector('#login').addEventListener('click', (e) => {
+        e.preventDefault();
+        let myName = document.querySelector('#login-name').value;
+        let myPassword = document.querySelector('#login-name').value;
+        mongo.connect(url, {useNewUrlParser: true}, (err, client) => {
+            if(err) {
+                console.log(err);
+                return
+            }
+            //console.log('connected');
+            const db = client.db('chat');
+            db.collection('users').findOne({
+                name: myName
+            }, (err, resp) => {
+                if(err) throw err;
+                if(resp && resp._id) {
+                    localStorage.setItem("myName", myName);
+                    localStorage.setItem("id", resp._id);
+                    localStorage.setItem("avatar", resp.avatar);
+                    document.querySelector('.log-form').classList.toggle('hidden');
+                    document.querySelector('#pills-tab').classList.toggle('hidden');
+                    document.querySelector('.to-log').classList.add('hidden');
+                    document.querySelector('.is-log').classList.remove('hidden');
+
+                    mongo.connect(url, {useNewUrlParser: true}, (err, client) => {
+                        if(err) {
+                            console.log(err);
+                            return
+                        }
+                        //console.log('connected');
+                        const db = client.db('chat');
+                        db.collection("users").find({ 
+                            name: 
+                                { $not: { $eq: localStorage.getItem("myName") } } 
+                            }).toArray(function(err, contacts) {
+                            if (err) throw err;
+                            console.log(contacts)
+                            loadContacts(contacts);
+                        });
+                    })
+                } else {
+                    console.log("NOK");
+                }
+            })
+        })
+    })
 }
 
 
 let loadContacts = contacts => {
+    //console.log(contacts)
+    document.getElementById('contacts').innerHTML = '';
     contacts.forEach(c => {
         let contact = document.createElement('li');
         contact.setAttribute("role", "tablist");
@@ -40,134 +213,65 @@ let loadContacts = contacts => {
         contact.onclick = () => {
             loadConversation(c);
         }
-        contact.innerHTML = `<figure class="flex nav-link" aria-selected="false" data-toggle="pill"><img src="${c.avatar}" class="listing-img"/><figcaption>${c.name}</figcaption></figure>`;
+        contact.innerHTML = `<figure id="${c._id}" class="flex nav-link" aria-selected="false" data-toggle="pill"><img src="${c.avatar}" class="listing-img"/><figcaption>${c.name}</figcaption></figure>`;
         document.getElementById('contacts').appendChild(contact);
+        
     });
 }
 
 let loadConversation = (user) => {
-    let conversations = {
-        1 : [
-            {
-                user: {
-                    name: 'me',
-                    avatar: 'https://gravatar.com/avatar/fbbde2a428d73dccc5890bc0b4624270?s=400&d=robohash&r=x'
-                },
-                message: "Bien le bonjour!"
-            },
-            {
-                user: user,
-                message: "Mauvais le bonjour!"
-            },
-            {
-                user: {
-                    name: 'me',
-                    avatar: 'https://gravatar.com/avatar/fbbde2a428d73dccc5890bc0b4624270?s=400&d=robohash&r=x'
-                },
-                message: "Tiens! T'ai de mauvaise humeur toi?"
-            },
-            {
-                user: user,
-                message: "Ouai, NodeJS toute la semaine!"
-            },
-        ],
-        2 : [
-            {
-                user: {
-                    name: 'me',
-                    avatar: 'https://gravatar.com/avatar/fbbde2a428d73dccc5890bc0b4624270?s=400&d=robohash&r=x'
-                },
-                message: "Yo"
-            },
-            {
-                user: user,
-                message: "Plait!"
-            }
-        ],
-        3 : [
-            {
-                user: {
-                    name: 'me',
-                    avatar: 'https://gravatar.com/avatar/fbbde2a428d73dccc5890bc0b4624270?s=400&d=robohash&r=x'
-                },
-                message: "Salut"
-            },
-            {
-                user: user,
-                message: "Salut, toi!"
-            },
-            {
-                user: {
-                    name: 'me',
-                    avatar: 'https://gravatar.com/avatar/fbbde2a428d73dccc5890bc0b4624270?s=400&d=robohash&r=x'
-                },
-                message: "Comment ça farte?"
-            },
-            {
-                user: user,
-                message: "Ca farte des skis!"
-            },
-        ],
-        4 : [
-            {
-                user: {
-                    name: 'me',
-                    avatar: 'https://gravatar.com/avatar/fbbde2a428d73dccc5890bc0b4624270?s=400&d=robohash&r=x'
-                },
-                message: "Salut Eili, comment va?"
-            },
-            {
-                user: user,
-                message: "Salut! Bien bien!"
-            },
-            {
-                user: {
-                    name: 'me',
-                    avatar: 'https://gravatar.com/avatar/fbbde2a428d73dccc5890bc0b4624270?s=400&d=robohash&r=x'
-                },
-                message: "Toujours cette phobie des araignées?"
-            },
-            {
-                user: user,
-                message: "Non, ça va, on bosse dessus avec Dritzz..."
-            },
-        ],
-        5 : [
-            {
-                user: {
-                    name: 'me',
-                    avatar: 'https://gravatar.com/avatar/fbbde2a428d73dccc5890bc0b4624270?s=400&d=robohash&r=x'
-                },
-                message: "Salut!"
-            },
-            {
-                user: user,
-                message: "Salut!"
-            },
-            {
-                user: {
-                    name: 'me',
-                    avatar: 'https://gravatar.com/avatar/fbbde2a428d73dccc5890bc0b4624270?s=400&d=robohash&r=x'
-                },
-                message: "Quelque chose à dire, pour la postérité?"
-            },
-            {
-                user: user,
-                message: "Prout!"
-            },
-        ]
-    }
-    let messages = conversations[user.id]
-    document.getElementById("conversation").innerHTML = "";
-    messages.forEach(d => {
-        let conversation = document.createElement('li');
-        conversation.innerHTML = `<div class="partial partial-image"><img src="${d.user.avatar}" class="avatar" alt=""></div><div class="partial"><p>${d.message}</p></div><div class="partial"></div>`;
-        document.getElementById('conversation').appendChild(conversation);
-    })
+    // let conversations
+    //console.log(user)
+    document.getElementById('send').dataset.id = user._id;
     document.getElementById("contact-name").innerHTML = user.name;
     document.getElementById("contact-img").src = user.avatar;
     document.getElementById("contact-social").innerHTML = `<img src="./public/img/24px.svg" alt=""><img src="./public/img/baseline_phone_black_18dp.png" alt="">`;
     
+    
+    mongo.connect(url, {useNewUrlParser: true}, (err, client) => {
+        if(err) {
+            console.log(err);
+            return
+        }
+        var conversationIds = [
+            user._id,
+            new ObjectId(localStorage.getItem("id"))
+        ];
+        //console.log(conversationIds)
+        //console.log('connected');
+        const db = client.db('chat');
+        db.collection('conversations').find({
+            users : {
+                $all : conversationIds,
+                $size : conversationIds.length
+            }
+        }).sort({dateTime: -1})
+            .limit(20)
+            .toArray( (err, messages) => {
+                gogo(messages)
+            })
+        })
+
+
+    // })
+    
+
 }
+
+let gogo = messages => {
+    //console.log(messages)
+    document.getElementById("conversation").innerHTML = "";
+    messages.forEach(d => {
+        let conversation = document.createElement('li');
+        if (d.user.name == localStorage.getItem("myName")) {
+            conversation.classList.add('me')
+            conversation.innerHTML = `<div class="partial partial-image"><img src="${d.user.avatar}" class="avatar" alt=""></div><div class="partial"><p class="my-bubble">${d.message}</p></div><div class="partial"></div>`;
+        } else {
+            conversation.innerHTML = `<div class="partial partial-image"><img src="${d.user.avatar}" class="avatar" alt=""></div><div class="partial"><p>${d.message}</p></div><div class="partial"></div>`;
+        }
+        document.getElementById('conversation').appendChild(conversation);
+    })
+}
+
 
 window.addEventListener('DOMContentLoaded', run)

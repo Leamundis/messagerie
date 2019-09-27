@@ -1,7 +1,6 @@
-document.querySelector('.to-log').addEventListener('click', () => {
-    document.querySelector('.log-form').classList.toggle('hidden');
-    document.querySelector('#pills-tab').classList.toggle('hidden');
-})  
+
+
+
 
 // document.querySelector('.contacts').addEventListener('click', (el) => {
 //     if (el.target.parentElement.parentElement.dataset.name == "girl" || el.target.parentElement.dataset.name == "girl") {

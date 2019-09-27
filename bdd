@@ -1,0 +1,51 @@
+{
+    users : [
+        ObjectId('user1'),
+        ObjectId('user2')
+    ],
+    user : {
+        name: 'me',
+        ObjectId('user2'),
+        avatar: ''
+    } ,
+    message: 'Salut',
+    dateTime : new Date()
+}
+
+
+var conversationIds = [
+    ObjectId('user1'),
+    ObjectId('user2')
+];
+
+db.collection('chat').find({
+    users : {
+        $all : conversationIds,
+        $size : conversationIds.length
+    }
+}).sort({dateTime: -1})
+  .limit(20)
+  .toArray( (err, messages) => {
+      gogogogogogogogogogo(messages)
+  })
+
+
+
+5d8a0c480c82d8055aeea28e
+
+
+5d8a0c890c82d8055aeea28f
+
+{
+    users : [
+        ObjectId('5d8a0c480c82d8055aeea28e'),
+        ObjectId('5d8a0c890c82d8055aeea28f')
+    ],
+    user : {
+        name: 'Vash',
+        ObjectId('5d8a0c890c82d8055aeea28f'),
+        avatar: 'https://gravatar.com/avatar/0d57488fa495da3eacf5600435b21c5f?s=400&d=robohash&r=x'
+    } ,
+    message: 'Salut!',
+    dateTime : new Date()
+}

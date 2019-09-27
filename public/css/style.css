@@ -42,7 +42,7 @@ header {
 }
 
 .listing {
-    border-right: 1px solid lightgrey;
+    background-color: cornflowerblue;
 }
 
 .listing-img {
@@ -87,23 +87,23 @@ header {
 }
 
 .conversation li p {
-    height: 90px;
+    min-height: 90px;
     padding: 10px 10px;
     background-color: lightgray;
     border-radius: 0px 20px 20px 20px;
 }
 
-.conversation li:nth-child(odd) {
-    display: flex;
-    flex-direction: row-reverse;
-}
 
-.conversation li:nth-child(odd) p {
-    background-color: cornflowerblue;
+.me {
     display: flex;
     flex-direction: row-reverse;
     border-radius: 20px 0px 20px 20px;
 }
+
+
+
+
+
 
 .conversation .partial-image {
     margin-top: -90px;
@@ -155,7 +155,8 @@ header {
 }
 
 .who {
-    border-left: 1px solid lightgrey;
+    height: 100%;
+    background-color: mediumslateblue;
 }
 
 .no-border {
@@ -169,7 +170,7 @@ header {
 }
 
 .contact-name {
-    height: 20%;
+    height: 10%;
     display: flex;
     align-items: center;
     padding: 30px;
@@ -177,14 +178,10 @@ header {
 }
 
 .contact-info {
-    height: 80%;
+    height: 40%;
     justify-content: center;
     align-items: center;
 
-}
-
-.me {
-    background-color: lightskyblue;
 }
 
 .log {
@@ -225,5 +222,51 @@ header {
 }
 
 .active {
-    background-color: lightseagreen!important;
+    background-color: lightskyblue!important;
+    color: black!important;
+}
+
+.my-bubble {
+    background-color: lightskyblue!important;
+    border-radius: 20px 0px 20px 20px!important;
+}
+
+.chat {
+    height: 100%;
+    overflow: auto;
+    background-color: lightskyblue
+}
+
+.overflow {
+    overflow: auto;
+}
+
+.cam-div {
+    height: 3%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.cam1 {
+    height: 47%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.listing img, .contact-info img {
+    background-color: lightgrey;
+}
+
+figure {
+    margin-bottom: 0;
+}
+
+.nav-pills .nav-link {
+    border-radius: 20px 0 0 20px!important;
+}
+
+.take-pic {
+    cursor: pointer;
 }
